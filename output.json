@@ -1,0 +1,240 @@
+[
+    {
+        "page_content": "118 AWS EKS IAM Role Setup AWS Account Configuration How to Add IAM User and IAM Role to AWS EKS Cluster? - DevOps by Example Create IAM policy AmazonEKSAdminPolicy granting access to all EKS resources: Create eks-admin role and attach AmazonEKSAdminPolicy Create AmazonEKSAssumeEKSAdminPolicy granting access to assume eks-admin role Attach AmazonEKSAssumeEKSAdminPolicy to any groups that require EKS access. Cluster Setup When creating a cluster, as the aws user who created the cluster run the below to configure kubectl for accessing the cluster 1 { 2 \"Version\": \"2012-10-17\", 3 \"Statement\": [ 4 { 5 \"Effect\": \"Allow\", 6 \"Action\": [ 7 \"eks:*\" 8 ], 9 \"Resource\": \"*\" 10 }, 11 { 12 \"Effect\": \"Allow\", 13 \"Action\": \"iam:PassRole\", 14 \"Resource\": \"*\", 15 \"Condition\": { 16 \"StringEquals\": { 17 \"iam:PassedToService\": \"eks.amazonaws.com\" 18 } 19 } 20 } 21 ] 22 } 1 { 2 \"Version\": \"2012-10-17\", 3 \"Statement\": [ 4 { 5 \"Effect\": \"Allow\", 6 \"Action\": [ 7 \"sts:AssumeRole\" 8 ], 9 \"Resource\": \"arn:aws:iam::284046360201:role/eks-admin\" 10 } 11 ] 12 } 1 aws eks update-kubeconfig --region us-east-2 --name CLUSTER_NAME",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 118
+        }
+    },
+    {
+        "page_content": "138 Customer Deployment Efforts Customer’s procurement officer just asked the following questions: Customer’s Role During Deployment How many hours does it take to install on-prem? How many of Customer people are needed to help (AYR) to install on-prem what should Customer people roles be? AYR’s Role During Deployment How many AYR people are needed to install on-prem What would AYR roles be during installation? Deployment Method Single Server GPU Cluster Customer’s Role During Deployment How many hours does it take to install on-prem? it usually takes 2 - 3 weeks to finish the on-premise installation, deployment, system tune up, and testing. How many of Customer people are needed to help (AYR) to install on-prem usually one or two customer people. what should Customer people roles be? 1. one is Supervisor who will supervise the entire SingularityAI platform’s running. the Supervisor is a business role who will be responsible to create users, projects (use cases), schemas, and watch the system’s running resources, license expired date/amount, train/fine-tune AI models, running model evaluation, publish AI models, etc. supervisor only needs to use front end UI to finish all the works. 2. the second role is System Administrator, who is responsible for back end system deployment/maintain/bug report/troubleshooting/system upgrade/security patch etc. this role is a technical role who need to understand Linux/Python/Docker/Kubernetes",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 138
+        }
+    },
+    {
+        "page_content": "105 The parser is getting frozen, which is typically caused by having too many workers, resulting in insufficient memory. Therefore, it is necessary to adjust the number of workers or the amount of memory in the YAML file to make them match. The number of workers can be adjusted by modifying the configMap.yaml , mainly the following parameters: Memory control is in the web.yaml and worker.yaml files. Adjust the following parameters in the web.yaml file: The worker.yaml file is adjusted in the same way. After making the necessary changes, apply them and restart by running kubectl apply -f web.yaml && kubectl apply -f worker.yaml , then check if the parser still gets stuck. Additionally, without changing the YAML file, you can restart the web or worker separately. Use the command: Here are some commonly used K8s commands as well: Tunneling ssh -L 30030:localhost:30030 leidos0 Enter the deployment directory cd /data1/singularityai/k8s/parser View all namespaces kubectl get namespace View pods and labels under namespace kubectl get pods -n deployment --show-labels View parser-web logs kubectl logs -f --tail 20 -n deployment -l app=parser-web View worker logs kubectl logs -f --tail 20 -n deployment -l app=parser-worker Enter the redis container kubectl exec -n deployment -it $(kubectl get pods -n deployment -l app=redis -o jsonpath='{.items[0].metadata",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 105
+        }
+    },
+    {
+        "page_content": "supervisor only needs to use front end UI to finish all the works. 2. the second role is System Administrator, who is responsible for back end system deployment/maintain/bug report/troubleshooting/system upgrade/security patch etc. this role is a technical role who need to understand Linux/Python/Docker/Kubernetes. The system administrator should have sudo permission. AYR’s Role During Deployment How many AYR people are needed to install on-prem One AYR engineer will be needed to finish the deployment. the deployment can be done either remotely or on-site depends on the customer’s requirements. the AYR engineer needs to be onboarded to the customer company to be able to access the customer’s on- premise environment in order to proceed the installation",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 138
+        }
+    },
+    {
+        "page_content": "43 AYR System User Roles MPP http://mpp-gateway.qa.bnymellon.net Model Hub http://modelhub-gateway.qa.bnymellon.net Model Flow http://flow-gateway.qa.bnymellon.net Project Admin Admin role of the project. This role can label data, train models, evaluate model and run inference Org Admin Admin role of an organization. This role can access organization management page, and can view GPU and model Status, inference statistics, add/edit users to the project. SuperUser This role is the admin user of MPP. It can access all the features, edit/delete users and can access database admin page. Role Name Role Description APP This role is used for other services to connect to model hub services. It can access model hub APIs to get model information and run inference. STAFF This role is used for devops engineers. It can access modelhub UI and access model hub APIs to load models. ADMIN This role is the admin user of model hub. It can access all the features and edit/delete users. Role Name Role Description StandardUser This role can access model flow webpage and edit model flow pipelines Administrator This role is the admin user of model flow. It can access all the features and edit/delete users. Role Name Role Description",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 43
+        }
+    },
+    {
+        "page_content": "8 BNY Sandbox Deployment instructions SingularityAI Infrastructure setup The following DNS urls are generated for us (Accessible only on BNY network) The cloud infrastructure is the following: One namespace is created: deployment The following storage class is enabled: azurefile-csi-nfs-premium They have set up their own postgres database Install the vgpu plugin from GitHub - 4paradigm/k8s-vgpu-scheduler: OpenAIOS vGPU device plugin for Kubernetes is originated from the OpenAIOS project to virtualize GPU device memory, in order t o allow applications to access larger memory space than its physical capacity. It is designed for ease of use of extended device memory for AI workloads. Remember to replace the kube-scheduler with an image from here: registry.k8s.io/kube-scheduler Otherwise, it will call some chinese registry Make sure to make the kube-scheduler version the same as your k8s version K8s Deployment All files: Redis Redis Deployment files BNY artefactory base url: hubble-aks.qa.bnymellon.net This step requires the help of the BNY cloud team, they will set up the machines for us 1 modelhub-gateway.dev.bnymellon.net 2 flow-gateway.dev.bnymellon.net 3 parser-gateway.dev.bnymellon.net 4 dpp-gateway.dev.bnymellon.net 5 mpp-gateway.dev.bnymellon.net 6 opp-gateway.dev.bnymellon",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 8
+        }
+    },
+    {
+        "page_content": "32 91 key: APISIX_API_KEY 92 - name: MODEL_HUB_ENDPOINT 93 valueFrom: 94 configMapKeyRef: 95 name: modelhub-config 96 key: MODEL_HUB_ENDPOINT 97 - name: CONFIG_FROM_ENV 98 value: \"1\" 99 - name: GPU_POOL_POLICY 100 valueFrom: 101 configMapKeyRef: 102 name: modelhub-config 103 key: GPU_POOL_POLICY 104 - name: KUBE_IMAGE_PULL_SECRETS 105 valueFrom: 106 configMapKeyRef: 107 name: modelhub-config 108 key: KUBE_IMAGE_PULL_SECRETS 109 - name: KUBE_NAMESPACE 110 valueFrom: 111 configMapKeyRef: 112 name: modelhub-config 113 key: KUBE_NAMESPACE 114 - name: KUBE_NODE_TYPE_TOLERATION 115 valueFrom: 116 configMapKeyRef: 117 name: modelhub-config 118 key: KUBE_NODE_TYPE_TOLERATION 119 - name: KUBE_CONFIG_PATH 120 value: /root/.kube/config 121 resources: 122 limits: 123 cpu: \"8\" 124 memory: 16000Mi 125 requests: 126 cpu: \"1\" 127 memory: 2000Mi 128 volumeMounts: 129 - name: volume-data 130 mountPath: /app/model_saved 131 - name: secrets 132 mountPath: /root/",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 32
+        }
+    },
+    {
+        "page_content": "119 Then update the authentication configuration as below: In the mapRoles: section add Access cluster as a different user If the cluster has been configured as shown above, run the following command to setup kubectl Check if everything works by running 1 kubectl edit -n kube-system configmap/aws-auth 1 - rolearn: arn:aws:iam::284046360201:role/eks-admin 2 username: eks-admin 3 groups: 4 - system:masters 1 aws eks update-kubeconfig --region us-east-2 --name CLUSTER_NAME --role-arn arn:aws:iam::284046360201:role/eks-ad 1 kubectl get svc",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 119
+        }
+    },
+    {
+        "page_content": "4 October 11, 2024. Univar 7/23/24 9/8/24 NET45 days after invoice date James Clarke Russell Upton james.clar ke@univar solutions.c om russ.upton @univarsol utions.com 1-281-297- 0691 Singularity AI platform License from July 03, 2024 to July 03, 2025 AYR Profession al Services $164,667.0 0 2023 2024 Univar 3-Jul-24 18-Aug-24 NET45 days after invoice date James Clarke Russell Upton james.clar ke@univar solutions.c om russ.upton @univarsol utions.com 1-281-297- 0691 Home - AYR.ai Cloud Hosting and Support for Univar (Billed Quarterly). second year up front (07- 03-2024 to 07-03- 2025) $24,000.00 2023 2024 Leidos 9/29/24 10/29/24 NET30 days from invoice date Michael Kester Sr. Program Manager michael.l.k ester@leid os.com Singularity AI Platform ELA P $3,000,000 .00 2023 2024 Tango 9/30/24 11/15/24 NET45 days after invoice date Kyle Borner Vice President of Operations kyle.borner @tangoe.c om Annual Software License for Singularity AI annual server maintenan ce for two servers $356,525.0 7 2023 2024",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 4
+        }
+    },
+    {
+        "page_content": "kube/config 121 resources: 122 limits: 123 cpu: \"8\" 124 memory: 16000Mi 125 requests: 126 cpu: \"1\" 127 memory: 2000Mi 128 volumeMounts: 129 - name: volume-data 130 mountPath: /app/model_saved 131 - name: secrets 132 mountPath: /root/.kube/config 133 subPath: kubeconfig 134 imagePullPolicy: IfNotPresent 135 restartPolicy: Always 136 terminationGracePeriodSeconds: 30 137 dnsPolicy: ClusterFirst 138 serviceAccountName: mh-sa 139 automountServiceAccountToken: true 140 revisionHistoryLimit: 10 141 progressDeadlineSeconds: 600 142 143 --- 144 kind: Service 145 apiVersion: v1 146 metadata: 147 name: modelhub-web 148 namespace: deployment 149 labels: 150 app: modelhub-web 151 spec: 152 ports: 153 - name: http-6001 154 protocol: TCP 155 port: 6001 156 targetPort: 6001 157 selector: 158 app: modelhub-web 159 sessionAffinity: None 160 ipFamilies: 161 - IPv4 162 ipFamilyPolicy: SingleStack 163 internalTrafficPolicy: Cluster 164 165 --- 166 kind: Deployment 167 apiVersion: apps/v1 168 metadata: 169 name: modelhub-webapp 170 namespace: deployment 171 labels: 172 app: modelhub-webapp 173 spec:",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 32
+        }
+    },
+    {
+        "page_content": "104 IRS Local Development Env Deployment - QA SinguParser How to Clean Up RedisQ for SinguParser? If SinguParser frozen, how to reenable it? Tunneling Enter the deployment directory View all namespaces View pods and labels under namespace View parser-web logs View worker logs Enter the redis container Start to restart one by one PostGreSQL is not working (port 5432) error? SinguParser How to Clean Up RedisQ for SinguParser? The task queue for parser is located in Redis. Therefore, in order to clear the task queue, it is necessary to clear all keys with the parser keyword in Redis. This needs to be reflected in the K8s commands as follows: First, navigate to the deployment directory for parser: Second, review all namespaces in Kubernetes: Third, lookup for all pods and labels in the \"deployment\" namespace since it typically contains the parser deployment: Fourth, connect to the Redis container using the following K8s command: Fifth, once inside the container, execute the following commands to clear all parser-related content in Redis: This will completely clear the task queue for parser. If SinguParser frozen, how to reenable it? 1 cd /data1/singularityai/k8s/parser 1 kubectl get namespace 1 kubectl get pods -n deployment --show-labels 1 kubectl exec -n deployment -it $(kubectl get pods -n deployment -l app=redis -o jsonpath='{.items[0].metadata.nam 1 redis-cli --scan --pattern '*parser*' | xargs redis-cli del",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 104
+        }
+    },
+    {
+        "page_content": "61 Login Server Management | Leidos K8S Leidos0: master IP: 173.61.113.42 SSH Port: 6060 User: deploy Leidos1: worker IP: 173.61.113.42 SSH Port: 6061 User: deploy Leidos2: worker IP: 173.61.113.42 SSH Port: 6062 User: deploy Leidos3: worker IP: 173.61.113.42 SSH Port: 6063 User: deploy K8S US Kubernetes (K8S) Deployment For installation of k8s, I followed this and there was minimal changes. All changes were reflected in the documents as needed. Below is a list of commands ran on the leidos environment following this guide. Expand each section to see more Run on all machines! comment out the swap line #/swapfile none swap sw 0 0 1 sudo vi /etc/fstab 1 # install docker stuff 2 sudo apt-get install docker-ce=5:20.10.24~3-0~ubuntu-bionic docker-ce-cli=5:20.10.24~3-0~ubuntu-bionic contai 3 4 # install tools 5 sudo apt-get update -y 6 sudo apt-get install -y ca-certificates curl software-properties-common apt-transport-https curl 7 8 # Download the Google Cloud public signing key: 9 sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://dl.k8s.io/apt/doc/apt-key.gpg 10 11 # Add the Kubernetes apt repository: 12 echo \"deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernete 13 14 #Update apt package index, install kubelet, kubeadm and kubectl, and pin their version: 15 sudo apt-get update 16 17 # install kubeadm、kubectl、kubelet",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 61
+        }
+    },
+    {
+        "page_content": "90 Launching k8s services After all config files are written, enter /data1/singularityai/k8s Run kubectl apply -f ./ --recursive Verify that all pods are up: kubectl get pods -n deployment Debug: kubectl describe pod <podname> -n deployment In order to shutdown, run: kubectl delete all --all -n deployment GPU Apps on Physical Servers Reminder, do docker login on Leidos1, 2, and 3 OPP We will be deploying OPP onto Leidos3 Accessible at: 192.168.1.203:31111 Change User/Password If you want to change password or user name, you can do so through the following methods: 1. First enter the container project directory ( /data/code/singuocr/ ) and execute python3.8 manage.py shell 2. Then copy the following code snippet to the shell terminal and execute it 56 57 --- 58 59 kind: Service 60 apiVersion: v1 61 metadata: 62 name: parser-gateway 63 namespace: deployment 64 labels: 65 app: parser-gateway 66 spec: 67 ports: 68 - name: http-80 69 protocol: TCP 70 port: 80 71 targetPort: 80 72 nodePort: 30030 73 selector: 74 app: parser-gateway 75 type: NodePort 1 from django.contrib.auth.models import User 2 user = User.objects.get(first_name='singuocr') # first name default is singuocr 3 user.first_name=\"new_first_name\" # new first name 4 user.set_password=(\"new_password\") # new password 5 user.save()",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 90
+        }
+    },
+    {
+        "page_content": "connect() File \"/usr/local/lib/python3.8/site- packages/django/utils/asyncio.py\", line 26, in inner return func(*args, **kwargs) File \"/usr/local/lib/python3.8/site- packages/django/db/backends/base/base.py\", line 225, in connect self.connection = self.get_new_connection(conn_params) File \"/usr/local/lib/python3.8/site-packages/django/utils/asyncio.py\", line 26, in inner return func(*args, **kwargs) File \"/usr/local/lib/python3.8/site-packages/django/db/backends/postgresql/base.py\", line 203, in get_new_connection connection = Database.connect(**conn_params) File \"/usr/local/lib/python3.8/site-packages/psycopg2/init.py\", line 122, in connect conn = _connect(dsn, connection_factory=connection_factory, **kwasync) django.db.utils.OperationalError: connection to server at \"192.168.1.200\", port 5432 failed: Connection refused Is the server running on that host and accepting TCP/IP connections? this error is caused by PostgreSQL is down, SinguParser cannot communicate with the DB. Solution: IRS Local Development Env Deployment | Postgres restart PostgreSQL: 1 cd /data1/singularityai/postgres 2 docker-compose down",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 106
+        }
+    },
+    {
+        "page_content": "70 54 key: DB_USER 55 - name: DB_PASSWORD 56 valueFrom: 57 configMapKeyRef: 58 name: dpp-config 59 key: DB_PASSWORD 60 - name: DB_NAME 61 valueFrom: 62 configMapKeyRef: 63 name: dpp-config 64 key: DB_NAME 65 - name: REDIS_HOST 66 valueFrom: 67 configMapKeyRef: 68 name: dpp-config 69 key: REDIS_HOST 70 - name: REDIS_PORT 71 valueFrom: 72 configMapKeyRef: 73 name: dpp-config 74 key: REDIS_PORT 75 - name: REDIS_PASSWORD 76 valueFrom: 77 configMapKeyRef: 78 name: dpp-config 79 key: REDIS_PASSWORD 80 - name: LANGUAGE_CODE 81 valueFrom: 82 configMapKeyRef: 83 name: dpp-config 84 key: LANGUAGE_CODE 85 - name: TIME_ZONE 86 valueFrom: 87 configMapKeyRef: 88 name: dpp-config 89 key: TIME_ZONE 90 - name: DJANGO_SUPERUSER_USERNAME 91 valueFrom: 92 configMapKeyRef: 93 name: dpp-config 94 key: DJANGO_SUPERUSER_USERNAME 95 - name: DJANGO_SUPERUSER_PASSWORD 96 valueFrom: 97 configMapKeyRef: 98 name: dpp-config 99 key: DJANGO_SUPERUSER_PASSWORD 100 - name: DJANGO_SUPERUSER_EMAIL 101 valueFrom: 102 configMapKeyRef: 103 name: dpp-config 104 key: DJANGO_SUPERUSER_EMAIL 105 resources: 106 limits: 107 cpu: '16' 108 memory: 32000Mi 109 requests: 110 cpu: '1' 111 memory: 2000Mi",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 70
+        }
+    },
+    {
+        "page_content": "115 CI/CD Demo Environments: Test Environment Model Hub (backbone2): http://192.168.1.197:9080/archive Production Environment Model Hub (leidos cluster): http://192.168.1.200:30505/inference S3 Bucket: https://s3.console.aws.amazon.com/s3/buckets/modelhub1?region=us-east-2&tab=objects Jenkins Server: https://jenkins.ayr.ai/ Deployed DPP Default Username and Password: Questions and Answers: 1. 2. 3. 4. 5. 6. 1 singudev # username 2 SinguDev1108! # password 1 superuser 2 singuadmin Q: Why do you need a model image name when deploying a new model? A: We’ll release a new image when there is a fix bug, feature upgrade or service upgrade. We think it’s better for version control to put it into the CD pipeline. However, we can hide it and using default ones as well. Q: Why do you need a model name when deploying a new model? A: Model name acts as identifier. Q: Can you make the model image choices a drop-down list? A: Absolutely! This is totally configurable. Q: The S3 public is public available. Can you make it private? A: Absolutely! We made it public available only for demo purpose. Q: What if S3 test environment and S3 production environment are different? A: We think it’s safe to assume there is a role that can access both S3 bucket, and we think the CI/CD tool should have this privilege. We can modify our pipeline to add a step to fetch the model from test S3 and publish it to production S3 and work from there",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 115
+        }
+    },
+    {
+        "page_content": "120 IRS Clearance/Access Process 1. Submit Initial Forms: OF306, FCRA, CSO RAC, NDA 2. A few weeks later you should receive “Sponsorship Complete” email with instructions on scheduling fingerprint appointment at AI Sch eduler At the appointment you will need to bring: two valid and non-expired forms of ID, one of which must be a Government-issued photo ID Bring required documents Our closest credentialing office is located on the second floor at: 955 S Springfield Ave, Springfield, NJ 07081 955 S Springfield Ave, Springfield, NJ 07081 Google maps may return incorrect results when searching for the address directly, the easiest way to enter it is by searching for “IRS Taxpayer Assistance Center” and selecting the S Springfield result",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 120
+        }
+    },
+    {
+        "page_content": "129 The Wonderful Company (TWC) Questionare Wonderful",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 129
+        }
+    },
+    {
+        "page_content": "31 8 spec: 9 replicas: 1 10 selector: 11 matchLabels: 12 app: modelhub-web 13 template: 14 metadata: 15 labels: 16 app: modelhub-web 17 spec: 18 volumes: 19 - name: volume-data 20 persistentVolumeClaim: 21 claimName: modelhub-data 22 - name: secrets 23 secret: 24 secretName: modelhub-secrets 25 - name: modelhub-config 26 configMap: 27 name: modelhub-config 28 containers: 29 - name: server 30 image: hubble-aks.qa.bnymellon.net/bnym/linux/bxp/ae/vendor/model_hub:20231121_77510fd-SNAPSHOT 31 command: [\"",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 31
+        }
+    },
+    {
+        "page_content": "64 SingularityAI On Leidos0, login to docker and set up authentication The output of the cat command is <b64 string> Now go to where your apps are stored, e.g. /data1/singularityai If this folder does not exist, create the folder, and then give ownership to the deploy user. sudo chown deploy:engineer /data1/singularityai Next create deployment namespace Next we will create folders for all of our apps and middleware We will have all k8s related stuff in its own folder Create secrets.yaml in the k8s directory using the <b64 string> from the docker login above k8s/secrets.yaml If joining k8s cluster is stuck, try doing this to generate a new join command: Run the following on master node: 1 # Join k8s cluster 2 sudo kubeadm join 192.168.1.200:6443 --token n61lua.y34vgjnw98h6kv1r --discovery-token-ca-cert-hash sha256:cc0 3 4 # NFS 5 sudo apt-get install nfs-common 6 sudo mkdir -p /data1/nfs/data 7 sudo mount -t nfs 192.168.1.200:/nfs/data /data1/nfs/data 1 kubeadm token create --print-join-command 1 docker login 2 3 cat ~/.docker/config.json | base64 -w0 1 kubectl create namespace deployment 1 # Current working directory: /data1/singularityai 2 3 mkdir -p k8s/dpp 4 mkdir -p k8s/flow 5 mkdir -p k8s/parser 6 mkdir -p k8s/redis 7 mkdir -p k8s/rabbitmq 8 9 mkdir postgres 1 kind: Secret 2 apiVersion: v1 3 metadata: 4 name: docker-registry 5 namespace: deployment 6 data: 7 .dockerconfigjson: <b64 string> 8 type: kubernetes.io/dockerconfigjson",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 64
+        }
+    },
+    {
+        "page_content": "kubesphere.io/logsidecar-config: \"{}\" 89 spec: 90 volumes: 91 - name: flow-data 92 persistentVolumeClaim: 93 claimName: flow-data 94 95 containers: 96 - name: service 97 image: \"hubble-aks.qa.bnymellon.net/bnym/linux/bxp/ae/vendor/singuflow:20230913_06e6dee-SNAPSHOT\" 98 ports: 99 - name: http-0 100 containerPort: 9000 101 protocol: TCP 102 env: 103 - name: DATABASE_ASYNC_URI 104 valueFrom: 105 configMapKeyRef: 106 name: flow-config 107 key: DATABASE_ASYNC_URI 108 - name: DATABASE_URI 109 valueFrom: 110 configMapKeyRef: 111 name: flow-config 112 key: DATABASE_URI 113 - name: JWT_SECRET_ALGORITHM 114 valueFrom: 115 configMapKeyRef: 116 name: flow-config 117 key: JWT_SECRET_ALGORITHM 118 - name: JWT_SECRET_KEY 119 valueFrom: 120 configMapKeyRef: 121 name: flow-config 122 key: JWT_SECRET_KEY 123 - name: JWT_TOKEN_EXPIRE_TIME 124 valueFrom: 125 configMapKeyRef: 126 name: flow-config 127 key: JWT_TOKEN_EXPIRE_TIME 128 - name: AES_TOKEN 129 valueFrom: 130 configMapKeyRef: 131 name: flow-config 132 key: AES_TOKEN",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 15
+        }
+    },
+    {
+        "page_content": "lic 1 key/eyJhY2NvdW50Ijp7ImlkIjoiM2Q1MWZlMjktODY2MS00NzFkLWJjNTUtMjY5MDU1NzdkYjkxIn0sInByb2R1Y3QiOnsiaWQiOiIwN2UzMT 1 -----BEGIN LICENSE FILE----- 2 eyJlbmMiOiI1Q0M0eWRpemFyZy9VanJBRlBNd1F4Mk9PN0xoNVNGdmltQnBW 3 bGp4TzVlendXdm0wTis5MFR5dWFBMzFnNVdaMmZXVWJSTlpESEs1Y2crZHBF 4 V05HK0Z3ejcxYkNoS2U2NGdvWjhLLzU3dHF2VitneElKTXhYVXNSdmJpZktq 5 S0NrS2x4Zzdqc2xyNnJuNjBDUDI0NzUrTkJYSW01VzdpYm1lYzlJOTlrcDEv 6 UW5LZllRa0tET3RHRkV0aDBOSXpISkNzMHFzSW9OcVMwVGRDcUJZajFIMXdr 7 OFhla2pQUWpHbitKRnZiVDUzOXpoTU9rUURNalBHNFdpM0dWTVFOT0EwQVlD 8 REtSTExaQ0ZWazFKcVZDOWxZSS9rcHkzQlh1amdmVWhKNXNjRnRVcUhEYncy 9 djRYRHRlRm5NUHV6ckNnQXN0MTA4b0VuK1B3dmE0VGhFeDB1WkxGdGJnVUNs 10 RldtdGRHNVdYdDBLVGJGRUJCYUIzRk9HWFJGKzI5OTNGOWYyNkwxeWh3M2lU 11 b0dERVVLZUJtRmpCQkVOaTBWamRGS3JiUFAzaWd3MFBHN2ZLZjVWM3dWNkVO 12 ZlgwUzhUTEllclg0SWZaMXFadTZXZlJvQm1Xa1hHdHZoVmp0R3RTUkZmL3hs 13 eEl1dEVnL2JWODlEeW85bDdCSEl6NU5jZGdPeVRrZ0w0Wko5dWp2anhwYkND 14 Uk1wdW1sR0hycG9XRHRhdTQ4L2tqSFRGQ0FpQUtjZmxjNW5PWXpRTlF3SlVE 15 MDhqM1ZDNVNHMytnOEV6dkZtL25ySWVnckcwT01EbitZQUpQanVVSWp6WWdX 16 OFlMQUJzSlFQaUlMbXhIYnJFeHNMOEJVL09rMlQwWDlidHM5MVVyUS9sM01y 17 ZTU0K0VTR3VLUkxMTmxUdzBFRmp6NmFnOTBIbURsTkRybGM5Z2h5b0oyd294 18 SHlhaU96Q2p6M3AyMnZNd1E3MHhQVUZrL0EwVWFqbXlzS2hpZEVRTGV3M1lS 19 dG8xM1RjWkcwRXJKbXNqbm5ycEEyZCt0b201R1h5bUdWQTRMOFIzbzVqdy9p 20 KzBPbXBzdmhrOGxpcUFlZWdESE1ERUE2UkJwdEdpQ2gvdTFIMVovOStGMW8w 21 RWlTeWxLN1pUeExtNGpFUlpZTXhoK1kzMzRTQzVKaTFkM0xZVFBuMFduS3BB 22 dXc2bytIUlA4aWl4bU1ZNDQ3QUZvK2lXUTdtV1hvajJ4NFJMSWZENWU3SmRS 23 Qk9VZkFaQWhhNWNBdVdPZ3JQamozQXg3ZkQrL2UyZkZkU3pIU3FIZmt6NnFi 24 bExieFBJYXQvNFVMdlpDd0Y4dG1CcXVhVDJPQnpMT2wvcnpLY25DRGE3WnVV 25 UjdNRTVqNFBaWGhLWC9zUHRmcUo0dXdxSDB6VEYvMDczdllCMkxiSmozYVF4 26 bW9kaHBOcnRvZWRxZ2NXSWxqUzhLSGNESytVVzg5ZEpEVVN5UG5iNnRrNTF5 27 RkQvNVVWQUgwbyttbTdsamlEV09lSlVHN0ovM2tnSzRtazVEV2lzc1VVZnhQ 28 cVEzZk5GYVZzT2ZlaWxxU1NBQjV4RW81UExrREtqWWI4U2dCNHhLeW9NYUp5 29 czQ5bXJMQ3RuUitvdVBIaWRjemRHaXljUEtRZlREODR0R3c0MzlCc21tbTlo 30 eVJkREtxV08xSHZUMzFlTTM5b0FDbjJMcis1eEdvbHBBUHJ5dVRHNTZIQVJ5 31 alRabGhVVjl4Umx2ZVlGaXdpempJVU5lTmpBN2JaKzRYZS8vVW9UZ3FYc2J5 32 dXNKZFpUTzA5bnJkdjFxMkxEc3ZkeE9SL3I1YUpkZ2hkL3FvMHdTYlBWTyt2 33 bllhVE8wSHF0WEVybUhBa2h6N1FWS2FMOWp5TlJDZzR2QWFvS1JRbHBvRmFz 34 Z0I3YW5LemJxYkxiR3dUTm52SUZIdlhnTjBFMTh1NEhlamc4ZkRvVTgwKzhq 35 eTdrenErL1FlYWwvVCtTa0tNa0hVS29vbWk1WVVKbkRRR2pOVFJhL2pqYlpw 36 K0RtbHlPajY4SUxhbHdsS0JEck1KT1BxaEljL2dZOE9MZEQwTkxXVDV6bUpK 37 a3F3Ukp2Z2JGc3MrcVpOZTR2TU5iVWxkWnZncnRNOHFVaktNUmd4WE4vT08v 38 VG1NSVdZRGk5Wkd6UFVpKzBLdGpyS1V3VTBkS2R5dXdoSkM5dEFlRXBVVE5Q 39 bGhDV2xIcGJOYk1NSVJVN1FrWDA1K1RSMWx4YXZDang0anpFTEc1MnJzUXY1 40 aCt5Y1liclEvcnBXK3V4NGVHWFhtRnQ5MXY0OURibVpOTXllSEltaDFnR2gv 41 ZjdDL2JqelBVZUVYT0R2cGdUSXJNdnRzQjhKdmJsWEVJT3dJd3p5TjBQVVVL 42 ZXBNMDhja0N1bXd3eC9QdVd0Qjc3MFk3Tm50RVVCSUVkK1Q1M2RkNW5jc2hU 43 SEdxandNZWtxK0VONVplZ1BzWTQwdjlQNFFiRmY2NlhUUWJRNVg5b0VYWGJy 44 ZkxzbkJLcUtOYWg4NzVRSFo3eVJCd2FxMDJESU15bWlOT3YxRURHdnFIUWJU 45 TU1DSVVzWGs5V2cxSDdCeGRHSkZIMmhwL0RlRHB0ZFZsMXVxc0JxUFhPUGVs 46 ZFE2SUNNaHVEUCs0eFFwdDQ0b2tMTkdYK1dUWkt5bUVqdlRhVVR0SFFxM1k1 47 QmJRQmcrbzA5VDAvT2Q2aExDZG5ma0Rlc1J2S0swVEdRVVdCVkpvcWFiRHFj 48 T0dMeUN4MlhST0gvMVkrNk9KUlBzK2J2emhKZXIvWHA3VmNONzJjWWhBU0p3 49 bG1IYldYc1NDNGhDTjZzcHkwTkpmeHl1bDQxVk9GNXgxM05yYkpLL20yVHlZ 50 NjRsYWF4WmhZTXdnb0NuYi9tMkxtOU84TWY1NTlGOE1ta0srYnB0WHdEbkNF 51 MjlIZTlFQjdjVGc3VUJxcHovcFNleWRDbHZRNnpRT3JOeXVYUFVMdVNOZ3dI",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 100
+        }
+    },
+    {
+        "page_content": "62 Run this on master node! Edit docker config sudo vi /etc/docker/daemon.json Put this inside Restart docker 18 sudo apt-get install -y kubelet=1.23.1-00 kubeadm=1.23.1-00 kubectl=1.23.1-00 19 20 # stop auto upgrade (apt upgrade will skip these) 21 # if run upgrade, unhold them first, then upgrade. finally hold them again. 22 sudo apt-mark hold kubelet kubeadm kubectl 23 24 sudo systemctl enable kubelet 25 sudo systemctl start kubelet 1 { 2 \"default-runtime\": \"nvidia\", 3 \"exec-opts\": [\"native.cgroupdriver=systemd\"], 4 \"runtimes\": { 5 \"nvidia\": { 6 \"path\": \"nvidia-container-runtime\", 7 \"runtimeArgs\": [] 8 } 9 } 10 } 1 sudo systemctl daemon-reload 2 sudo systemctl restart docker Get master token and hash Output: (use this for joining worker nodes) 1 # Init k8s 2 sudo kubeadm init \\ 3 --apiserver-advertise-address=192.168.1.200 \\ 4 --image-repository k8s.gcr.io \\ 5 --kubernetes-version v1.23.17 \\ 6 --service-cidr=10.96.0.0/16 \\ 7 --pod-network-cidr=172.26.0.0/16 8 9 # After k8s inits, set up config 10 mkdir -p $HOME/.kube 11 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config 12 sudo chown $(id -u):$(id -g) $HOME/.kube/config 13 export KUBECONFIG=$HOME/.kube/config 14 15 # Calico middleware 16 wget https://docs.tigera.io/archive/v3.25/manifests/calico.yaml 17 sudo kubectl apply -f calico.yaml 1 sudo kubeadm token create 2 openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dg 1 n61lua.y34vgjnw98h6kv1r",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 62
+        }
+    },
+    {
+        "page_content": "github.io/nfs-subdir-external-prov 25 sudo helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisi 26 --create-namespace \\ 27 --namespace nfs-provisioner \\ 28 --set nfs.server=192.168.1.200 \\ 29 --set nfs.path=/nfs/data 30 31 # Patch k8s to use nfs as default storage 32 kubectl patch storageclass nfs-client -p '{\"metadata\": {\"annotations\":{\"storageclass.kubernetes.io/is-default 33 34 # nvidia plugin 35 kubectl apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.9.0/nvidia-device-plugin.yml 36 37 # kubesphere 38 kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.3.2/kubesphere-installer.yam 39 kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.3.2/cluster-configuration.ya",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 63
+        }
+    },
+    {
+        "page_content": "112",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 112
+        }
+    },
+    {
+        "page_content": "yml 76 key: REDIS_PORT 77 - name: REDIS_PASSWORD 78 valueFrom: 79 configMapKeyRef: 80 name: dpp-config 81 key: REDIS_PASSWORD 82 - name: LANGUAGE_CODE 83 valueFrom: 84 configMapKeyRef: 85 name: dpp-config 86 key: LANGUAGE_CODE 87 - name: TIME_ZONE 88 valueFrom: 89 configMapKeyRef: 90 name: dpp-config 91 key: TIME_ZONE 92 - name: DJANGO_SUPERUSER_USERNAME 93 valueFrom: 94 configMapKeyRef: 95 name: dpp-config 96 key: DJANGO_SUPERUSER_USERNAME 97 - name: DJANGO_SUPERUSER_PASSWORD 98 valueFrom: 99 configMapKeyRef: 100 name: dpp-config 101 key: DJANGO_SUPERUSER_PASSWORD 102 - name: DJANGO_SUPERUSER_EMAIL 103 valueFrom: 104 configMapKeyRef: 105 name: dpp-config 106 key: DJANGO_SUPERUSER_EMAIL 107 resources: 108 requests: 109 cpu: \"40\" 110 memory: 80Gi 111 volumeMounts: 112 - name: volume-data 113 mountPath: /code/src/media 114 subPath: media 115 imagePullPolicy: IfNotPresent 116 restartPolicy: Always 117 terminationGracePeriodSeconds: 30 118 dnsPolicy: ClusterFirst 119 serviceAccountName: default 120 serviceAccount: default 121 securityContext: {} 122 strategy: 123 type: RollingUpdate 124 rollingUpdate: 125 maxUnavailable: 25% 126 maxSurge: 25% 127 revisionHistoryLimit: 10 128 progressDeadlineSeconds: 600 129 130 --- 131 kind: Service 132 apiVersion: v1 133 metadata: 134 name: dpp-service 135 namespace: deployment 136 labels: 137 app: dpp-service 138 spec: 139 ports: 140 - name: http-8010 141 protocol: TCP 142 port: 8010 143 targetPort: 8010 144 selector: 145 app: dpp-service 146 type: ClusterIP 147 1 apiVersion: v1 2 kind: ConfigMap 3 metadata: 4 name: dpp-gateway-conf 5 namespace: deployment 6 data: 7 nginx",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 12
+        }
+    },
+    {
+        "page_content": "items[0].metadata.name}') -- /bin/bash 1 WEB_WORKER_NUMS: '200' # 5 * total number of virtual cpu cores 2 WORKER_NUMS: '200' # 5 * total number of virtual cpu cores 1 resources: 2 limits: 3 cpu: '40' # total number of virtual cpu cores 4 memory: 80000Mi # cpu * 2000Mi 5 requests: 6 cpu: '32' # up to 2/3 of total number of virtual cpu cores 7 memory: 64000Mi # cpu * 2000Mi 1 kubectl delete pods -n deployment -l app=parser-web && kubectl delete pods -n deployment -l app=parser-worker",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 105
+        }
+    },
+    {
+        "page_content": "12 dppNginx",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 12
+        }
+    },
+    {
+        "page_content": "22 parserFront.yml 43 key: DATABASE_URL 44 - name: MODEL_HUB_URLS 45 valueFrom: 46 configMapKeyRef: 47 name: parser-config 48 key: MODEL_HUB_URLS 49 resources: 50 limits: 51 cpu: \"16\" 52 memory: 32000Mi 53 requests: 54 cpu: \"4\" 55 memory: 8000Mi 56 volumeMounts: 57 - name: volume-data 58 mountPath: /app/result 59 subPath: result 60 imagePullPolicy: IfNotPresent 61 restartPolicy: Always 62 terminationGracePeriodSeconds: 30 63 dnsPolicy: ClusterFirst 64 serviceAccountName: default 65 securityContext: {} 66 strategy: 67 type: RollingUpdate 68 rollingUpdate: 69 maxUnavailable: 25% 70 maxSurge: 25% 71 revisionHistoryLimit: 10 72 progressDeadlineSeconds: 600 73 1 kind: Deployment 2 apiVersion: apps/v1 3 metadata: 4 name: parser-front 5 namespace: deployment 6 labels: 7 app: parser-front 8 spec: 9 replicas: 1 10 selector: 11 matchLabels: 12 app: parser-front 13 template: 14 metadata: 15 labels: 16 app: parser-front 17 spec: 18 containers: 19 - name: parser-front 20 image: hubble-aks.qa.bnymellon.net/bnym/linux/bxp/ae/vendor/singu_parser_front:v1.1",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 22
+        }
+    },
+    {
+        "page_content": "117 IRS AWS DEPLOYMENT AWS Resource Allocations New cluster creation deployment files and instructions on github https://github.com/ayr-ai/aws_k8s_cluster/ 1. EKS Cluster 1. create VPC 2. create IAM role a. b. create the role c. attach the EKS IAM policy 3. open https://console.aws.amazon.com/eks/home#/clusters 4. Follow the instructions here: Getting started with Amazon EKS – AWS Management Console and AWS CLI - Amazon EKS Connect your Github account 1 aws cloudformation create-stack \\ 2 --region us-east-2 \\ 3 --stack-name leidos-test-stack \\ 4 --template-url https://s3.us-west-2.amazonaws.com/amazon-eks/cloudformation/2020-10-29/amazon-eks-vpc-private-s 1 vim eks-cluster-role-trust-policy.json 2 3 # paste the following 4 { 5 \"Version\": \"2012-10-17\", 6 \"Statement\": [ 7 { 8 \"Effect\": \"Allow\", 9 \"Principal\": { 10 \"Service\": \"eks.amazonaws.com\" 11 }, 12 \"Action\": \"sts:AssumeRole\" 13 } 14 ] 15 } 1 aws iam create-role \\ 2 --role-name LeidosTestEKSClusterRole \\ 3 --assume-role-policy-document file://\"eks-cluster-role-trust-policy.json\" 1 aws iam attach-role-policy \\ 2 --policy-arn arn:aws:iam::aws:policy/AmazonEKSClusterPolicy \\ 3 --role-name LeidosTestEKSClusterRole",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 117
+        }
+    },
+    {
+        "page_content": "80 SinguParser Available as part of k8s cluster 192.168.1.200:30030 289 labels: 290 app: flow-web-service 291 spec: 292 ports: 293 - name: http-80 294 protocol: TCP 295 port: 80 296 targetPort: 80 297 selector: 298 app: flow-web-service 299 300 301 --- 302 303 kind: Service 304 apiVersion: v1 305 metadata: 306 name: flow-webapp 307 namespace: deployment 308 labels: 309 app: flow-webapp 310 spec: 311 ports: 312 - name: http-80 313 protocol: TCP 314 port: 80 315 targetPort: 80 316 selector: 317 app: flow-webapp 318 319 --- 320 321 kind: Service 322 apiVersion: v1 323 metadata: 324 name: flow-gateway 325 namespace: deployment 326 labels: 327 app: flow-gateway 328 spec: 329 ports: 330 - name: http-80 331 protocol: TCP 332 port: 80 333 targetPort: 80 334 nodePort: 30020 335 selector: 336 app: flow-gateway 337 type: NodePort 338 339",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 80
+        }
+    },
+    {
+        "page_content": "2 Customer Description Project Tracker Recently updated content SMBC Deployment about 3 hours ago • contributed by HarrisonLi New Feature Requests from IRS/Leidos Jun 20, 2024 • contributed by Tianhao Wu Customer Overview Jun 19, 2024 • contributed by HarrisonLi IRS Jun 11, 2024 • contributed by Tianhao Wu SMBC Jun 11, 2024 • contributed by Tianhao Wu Bank of New York (BNY) Jun 11, 2024 • contributed by Tianhao Wu The Wonderful Company (TWC) Jun 11, 2024 • contributed by Tianhao Wu Univar Jun 11, 2024 • contributed by Tianhao Wu Tangoe Jun 11, 2024 • contributed by Tianhao Wu Leidos - IRS Jun 11, 2024 • contributed by Tianhao Wu Contributors Tianhao Wu (Unlicensed), Tianhao Wu, Daniel Pham, Senhao Han (Unlicensed), Rui Rachel Liu, HarrisonLi, Xuyang Weng, Shreyash Singh, Jacob Hughes, Yingchao Zhang, . In a sentence or two, describe the purpose of this space. This list below will automatically update each time somebody in your space creates or updates content. This list below will automatically update each time somebody in your space creates or updates content",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 2
+        }
+    },
+    {
+        "page_content": "19 15 labels: 16 app: parser-web 17 spec: 18 volumes: 19 - name: volume-data 20 persistentVolumeClaim: 21 claimName: parser-data 22 nodeSelector: 23 nodeType: \"idp-dataparser\" 24 containers: 25 - name: web 26 image: hubble-aks.qa.bnymellon",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 19
+        }
+    },
+    {
+        "page_content": "74 SinguFlow Available as part of k8s cluster 192.168.1.200:30020 Flow Instructions 27 - name: dpp-gateway 28 image: 'nginx:stable' 29 volumeMounts: 30 - name: dpp-gateway-conf 31 mountPath: /etc/nginx/conf.d/default.conf 32 subPath: nginx.conf 33 ports: 34 - name: http-1 35 containerPort: 80 36 protocol: TCP 37 resources: {} 38 terminationMessagePath: /dev/termination-log 39 terminationMessagePolicy: File 40 imagePullPolicy: IfNotPresent 41 42 restartPolicy: Always 43 terminationGracePeriodSeconds: 30 44 dnsPolicy: ClusterFirst 45 serviceAccountName: default 46 serviceAccount: default 47 securityContext: {} 48 schedulerName: default-scheduler 49 strategy: 50 type: RollingUpdate 51 rollingUpdate: 52 maxUnavailable: 25% 53 maxSurge: 25% 54 revisionHistoryLimit: 10 55 progressDeadlineSeconds: 600 56 57 --- 58 59 kind: Service 60 apiVersion: v1 61 metadata: 62 name: dpp-gateway 63 namespace: deployment 64 labels: 65 app: dpp-gateway 66 spec: 67 ports: 68 - name: http-80 69 protocol: TCP 70 port: 80 71 targetPort: 80 72 nodePort: 30040 73 selector: 74 app: dpp-gateway 75 type: NodePort",
+        "metadata": {
+            "source_data": "/data2/yixu/Customer-240624-191949.pdf",
+            "page_num": 74
+        }
+    }
+]
