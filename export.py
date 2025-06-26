@@ -5,8 +5,8 @@ from tqdm import tqdm
 import json
 
 
-os.environ['atlassianUserEmail'] = 'dantanlianxyx@gmail.com' 
-os.environ['atlassianAPIToken'] = 'ATATT3xFfGF0aVaZRzbU5KjDyEJgpDmCY8_b7CkThNxBWU2xoPeduFwMgLHWlrBSixWpGWwxAGbMsos7Pll-FVr3xcDek09WqmjxYoISXDDYo5ogcdUV2dsBvIKH4SSfAiv32zVyl-RsAQmcVlHw7RfwGjrbCq4TdurGo9QcCSza1l74wLiU5Sc=F2584998'
+os.environ['atlassianUserEmail'] = '<user name>' 
+os.environ['atlassianAPIToken'] = '<api token>'
 
 
 def export_page_as_html(atlassian_site,page_id):
@@ -42,14 +42,7 @@ def export_page_as_html(atlassian_site,page_id):
     return html_of_page
 
 
-# def download_all_confluence_page(output_folder):
-#     atlassian_site = 'singularity-systems'
-#     confluence = Confluence(
-#         url='https://singularity-systems.atlassian.net',
-#         username='dantanlianxyx@gmail.com',
-#         password='ATATT3xFfGF0aVaZRzbU5KjDyEJgpDmCY8_b7CkThNxBWU2xoPeduFwMgLHWlrBSixWpGWwxAGbMsos7Pll-FVr3xcDek09WqmjxYoISXDDYo5ogcdUV2dsBvIKH4SSfAiv32zVyl-RsAQmcVlHw7RfwGjrbCq4TdurGo9QcCSza1l74wLiU5Sc=F2584998',
-#         api_version='cloud',
-#         cloud=True)
+
 
 #     spaces = confluence.get_all_spaces(start=0, limit=500, expand=None)['results']
 #     list_of_spaces = []
