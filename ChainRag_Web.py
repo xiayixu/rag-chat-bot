@@ -29,9 +29,9 @@ from io import BytesIO
 #download pdf page
 def download_pdf(dic):
     confluence = Confluence(
-    url='https://singularity-systems.atlassian.net',
-    username='dantanlianxyx@gmail.com',
-    password='ATATT3xFfGF0aVaZRzbU5KjDyEJgpDmCY8_b7CkThNxBWU2xoPeduFwMgLHWlrBSixWpGWwxAGbMsos7Pll-FVr3xcDek09WqmjxYoISXDDYo5ogcdUV2dsBvIKH4SSfAiv32zVyl-RsAQmcVlHw7RfwGjrbCq4TdurGo9QcCSza1l74wLiU5Sc=F2584998',
+    url='<url for confluence>',
+    username='<username for confluence>',
+    password='<password for confluence>',
     api_version='cloud',
     cloud=True)
 
@@ -187,9 +187,7 @@ if rebuild_button:
             st.write("Error: ", response.status_code)
 
 
-#button to lead to some other web at side bar
-link = 'https://ayr.ai'
-st.sidebar.link_button(label='website :+1:',url = link)
+
 
 
 clear_button = st.button("Start a new question", key="clear_button")
