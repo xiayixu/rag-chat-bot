@@ -159,8 +159,8 @@ def build_retriever(split_docs_with_pages, sentence_transformer_path,reranker_mo
     '''
 
     ##Key for local elastic search dataset
-    ELASTIC_PASSWORD = "rBVbhRsWdWJ5iI8+dRIf"
-    CERT_FINGERPRINT = "fe2c26245fae3bd828898e7cfe976a64182e448e8feb6b596b1477b78a161dd5"
+    ELASTIC_PASSWORD = "<password>"
+    CERT_FINGERPRINT = "<keys>"
     es = Elasticsearch(
         "https://localhost:9200",
         ssl_assert_fingerprint=CERT_FINGERPRINT,
@@ -355,9 +355,9 @@ from bs4 import BeautifulSoup
 def download_all_confluence_page(output_folder):
     atlassian_site = 'singularity-systems'
     confluence = Confluence(
-        url='https://singularity-systems.atlassian.net',
-        username='dantanlianxyx@gmail.com',
-        password='ATATT3xFfGF0aVaZRzbU5KjDyEJgpDmCY8_b7CkThNxBWU2xoPeduFwMgLHWlrBSixWpGWwxAGbMsos7Pll-FVr3xcDek09WqmjxYoISXDDYo5ogcdUV2dsBvIKH4SSfAiv32zVyl-RsAQmcVlHw7RfwGjrbCq4TdurGo9QcCSza1l74wLiU5Sc=F2584998',
+        url='<confluence url>',
+        username='username',
+        password='<API token>',
         api_version='cloud',
         cloud=True)
 
